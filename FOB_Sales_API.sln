@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2041
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FOB_Sales_API", "FOB_Sales_API\FOB_Sales_API.csproj", "{305DAFDD-F882-4030-9D49-BB41C155DB56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FOB_Sales_API.Tests", "FOB_Sales_API.Tests\FOB_Sales_API.Tests.csproj", "{A34DC3D0-022E-457B-8008-CFB21F54A1A1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{305DAFDD-F882-4030-9D49-BB41C155DB56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{305DAFDD-F882-4030-9D49-BB41C155DB56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{305DAFDD-F882-4030-9D49-BB41C155DB56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{305DAFDD-F882-4030-9D49-BB41C155DB56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A34DC3D0-022E-457B-8008-CFB21F54A1A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A34DC3D0-022E-457B-8008-CFB21F54A1A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A34DC3D0-022E-457B-8008-CFB21F54A1A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A34DC3D0-022E-457B-8008-CFB21F54A1A1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {920F0068-5D30-4A8B-9FE7-3D485E557590}
+	EndGlobalSection
+EndGlobal
