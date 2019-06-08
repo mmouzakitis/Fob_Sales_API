@@ -31,7 +31,7 @@ namespace FOB_Sales_API.Models.Common
         
         public static string FormatPhoneForDatabase(string value)
         {
-            return value.Replace("-", "").Replace("(", "").Replace(")", "").Replace(" ","");
+            return value.Replace("-", "").Replace("(", "").Replace(")", "").Replace(" ","").Replace(".","");
         }
 
         public static string ConvertToCurrency(double value)

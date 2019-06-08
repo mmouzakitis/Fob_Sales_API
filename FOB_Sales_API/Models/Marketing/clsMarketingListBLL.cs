@@ -14,6 +14,7 @@ namespace FOB_Sales_API.Models.Marketing
 {
     public class clsMarketingListRecrod
     {
+        public int index { get; set; }
         public string marketing_list_id { get; set; }
         public string first_name { get; set; }
         public string last_name { get; set; }
@@ -29,6 +30,7 @@ namespace FOB_Sales_API.Models.Marketing
         public string created_by_id { get; set; }
         public string created_by { get; set; }
         public bool contacted_bool { get; set; }
+        public bool has_notes { get; set; }
         public string date_added { get; set; }
     }
 
@@ -60,20 +62,13 @@ namespace FOB_Sales_API.Models.Marketing
         public string sent_by { get; set; }
     }
 
-    public class clsSearhMarketingList
-    {
-        public string first_name { get; set; }
-        public string last_name { get; set; }
-        public string address { get; set; }
-        public string email { get; set; }
-        public string phone { get; set; }
-        public string city { get; set; }
-        public string state { get; set; }
-        public string zip_code { get; set; }
-        public bool? contacted { get; set; }
-    }
 
-    
+
+    public class clsNotes
+    {
+        public string id { get; set; }
+        public string notes { get; set; }
+    }
 
     public class clsMarketingListBLL
     {
@@ -220,6 +215,49 @@ namespace FOB_Sales_API.Models.Marketing
         }
 
 
+        public string LoadMarketingNotes(clsId IdObj)
+        {
+            try
+            {
+                DAL db = new DAL();
+                db.Parameters("id", clsCrypto.Decrypt(IdObj.id));
+                db.CommandText = "SELECT notes FROM marketing_list WHERE marketing_list_id=@id";
+                string notes = DBLogic.DBString(db.ExecuteScalar());
+                status = KeyConstantsMsgs.success;
+                return notes;
+            }
+            catch (Exception ex)
+            {
+                string tt = ex.ToString();
+                status = KeyConstantsMsgs.error;
+                return "";
+            }
+        }
+
+        public void UpdateMarketingNotes(clsNotes record)
+        {
+            try
+            {
+                DAL db = new DAL();
+                db.parameters.Clear();
+                db.Parameters("marketing_list_id", clsCrypto.Decrypt(record.id));
+                db.Parameters("notes", record.notes.Trim());
+                db.CommandText = "sp_update_marketing_notes";
+                int result = Int32.Parse(db.ExecuteStoredProcedure());
+                status = KeyConstantsMsgs.success;
+                message = KeyConstantsMsgs.information_updated;
+            }
+            catch (Exception ex)
+            {
+                string ss = ex.ToString();
+                status = KeyConstantsMsgs.error;
+                message = KeyConstantsMsgs.error_updating_notes;
+            }
+        }
+
+
+
+
 
         public clsMarketingListRecrod LoadSingleMarketingRecord(clsId IdObj)
         {
@@ -256,39 +294,68 @@ namespace FOB_Sales_API.Models.Marketing
         }
 
 
-        public List<clsMarketingListRecrod> LoadMarketingList(clsSearhMarketingList SearchParameters)
+        public List<clsMarketingListRecrod> LoadMarketingList(clsSearhObj SearchParameters)
         {
             try
             {
                 DAL db = new DAL();
-                clsAddressParser ParseSearchParameter = new clsAddressParser();
-               
-                string where_clause = ConstructMarketingWhereClause(SearchParameters, db);
+
+                clsCommon common = new clsCommon();
+
+                string where_clause = common.ConstructMarketingWhereClause(SearchParameters, db);
          
                 db.CommandText = "SELECT * FROM v_marketing_list " + where_clause + " ORDER BY date_created DESC";
                 DataTable dt = db.ConvertQueryToDataTable();
 
+                clsAddressParser ParseSearchParameter = new clsAddressParser();
                 List<clsMarketingListRecrod> records = new List<clsMarketingListRecrod>();
-                records = (from DataRow row in dt.Rows
-                           select new clsMarketingListRecrod()
-                           {
-                               marketing_list_id = clsCrypto.Encrypt(DBLogic.DBString(row["marketing_list_id"])),
-                               first_name = DBLogic.DBString(row["first_name"]),
-                               last_name = DBLogic.DBString(row["last_name"]),
-                               business_phone = DBLogic.DBString(row["business_phone"]),
-                               business_name = DBLogic.DBString(row["business_name"]),
-                               business_email = DBLogic.DBString(row["business_email"]),
-                               business_address = DBLogic.DBString(row["business_address"]),
-                               business_url = DBLogic.DBString(row["business_website"]),
-                               business_city = DBLogic.DBString(row["business_city"]),
-                               business_state = DBLogic.DBString(row["business_state"]),
-                               business_zip = DBLogic.DBString(row["business_zip"]),
-                               created_by = DBLogic.DBString(row["created_by"]),
-                               contacted_bool = DBLogic.DBBool(row["has_been_contacted"]),
-                               contacted = DBLogic.ConvertBoolToYesNo(DBLogic.DBBool(row["has_been_contacted"])),
-                               date_added = DBLogic.LongDateString(row["date_created"].ToString())
-                           }).ToList();
+                int count = 1;
+                foreach(DataRow row in dt.Rows)
+                {
+                    clsMarketingListRecrod record = new clsMarketingListRecrod()
+                    {
+                        index = count,
+                        marketing_list_id = clsCrypto.Encrypt(DBLogic.DBString(row["marketing_list_id"])),
+                        first_name = DBLogic.DBString(row["first_name"]),
+                        last_name = DBLogic.DBString(row["last_name"]),
+                        business_phone = DBLogic.DBString(row["business_phone"]),
+                        business_name = DBLogic.DBString(row["business_name"]),
+                        business_email = DBLogic.DBString(row["business_email"]),
+                        business_address = DBLogic.DBString(row["business_address"]),
+                        business_url = DBLogic.DBString(row["business_website"]),
+                        business_city = DBLogic.DBString(row["business_city"]),
+                        business_state = DBLogic.DBString(row["business_state"]),
+                        business_zip = DBLogic.DBString(row["business_zip"]),
+                        created_by = DBLogic.DBString(row["created_by"]),
+                        contacted_bool = DBLogic.DBBool(row["has_been_contacted"]),
+                        has_notes = Convert.ToBoolean(row["has_notes"]),
+                        contacted = DBLogic.ConvertBoolToYesNo(DBLogic.DBBool(row["has_been_contacted"])),
+                        date_added = DBLogic.LongDateString(row["date_created"].ToString())
+                    };
+                    records.Add(record);
+                    count = count + 1;
+                }
                 return records;
+
+                //records = (from DataRow row in dt.Rows
+                //           select new clsMarketingListRecrod()
+                //           {
+                //               marketing_list_id = clsCrypto.Encrypt(DBLogic.DBString(row["marketing_list_id"])),
+                //               first_name = DBLogic.DBString(row["first_name"]),
+                //               last_name = DBLogic.DBString(row["last_name"]),
+                //               business_phone = DBLogic.DBString(row["business_phone"]),
+                //               business_name = DBLogic.DBString(row["business_name"]),
+                //               business_email = DBLogic.DBString(row["business_email"]),
+                //               business_address = DBLogic.DBString(row["business_address"]),
+                //               business_url = DBLogic.DBString(row["business_website"]),
+                //               business_city = DBLogic.DBString(row["business_city"]),
+                //               business_state = DBLogic.DBString(row["business_state"]),
+                //               business_zip = DBLogic.DBString(row["business_zip"]),
+                //               created_by = DBLogic.DBString(row["created_by"]),
+                //               contacted_bool = DBLogic.DBBool(row["has_been_contacted"]),
+                //               contacted = DBLogic.ConvertBoolToYesNo(DBLogic.DBBool(row["has_been_contacted"])),
+                //               date_added = DBLogic.LongDateString(row["date_created"].ToString())
+                //           }).ToList();
             }
             catch (Exception ex)
             {
@@ -299,79 +366,7 @@ namespace FOB_Sales_API.Models.Marketing
 
 
 
-        private string ConstructMarketingWhereClause(clsSearhMarketingList SearchParameters, DAL db)
-        {
-            string where_clause = string.Empty;
-            bool add_AND = false;
-            db.ClearParameters();
-            if (string.IsNullOrEmpty(SearchParameters.address) == false)
-            {
-                db.Parameters("address", SearchParameters.address);
-                where_clause = "business_address=@address";
-                add_AND = true;
-            }
-            if (string.IsNullOrEmpty(SearchParameters.city) == false)
-            {
-                db.Parameters("city", SearchParameters.city);
-                if(add_AND == true)
-                {
-                    where_clause = where_clause + " AND " + where_clause;
-                }
-                else
-                {
-                    where_clause = "business_city=@city";
-                }
-                add_AND = true;
-            }
-            if (string.IsNullOrEmpty(SearchParameters.state) == false)
-            {
-                db.Parameters("state", SearchParameters.state);
-                
-                if (add_AND == true)
-                {
-                    where_clause = where_clause + " AND " + where_clause;
-                }
-                else
-                {
-                    where_clause = "business_state=@state";
-                }
-                add_AND = true;
-            }
-            if(string.IsNullOrEmpty(SearchParameters.email) == false)
-            {
-                db.Parameters("email", SearchParameters.email);
-                if (add_AND == true)
-                {
-                    where_clause = where_clause + " AND " + where_clause;
-                }
-                else
-                {
-                    where_clause = "business_email=@email";
-                }
-                add_AND = true;
-            }
-            if (SearchParameters.contacted != null)
-            {
-                db.Parameters("contacted", SearchParameters.contacted.ToString());
-                if (add_AND == true)
-                {
-                    where_clause = where_clause + " AND " + where_clause;
-                }
-                else
-                {
-                    where_clause = "has_been_contacted=@contacted";
-                }
-                add_AND = true;
-            }
-            if (where_clause.Length > 0)
-            {
-                where_clause = " WHERE " + where_clause;
-                add_AND = true;
-            }
-            return where_clause;
-        }
-
-
+  
         public void CreateNewMarketingRecord(clsMarketingListRecrod record)
         {
             try
@@ -427,7 +422,7 @@ namespace FOB_Sales_API.Models.Marketing
                 db.Parameters("first_name", record.first_name.Trim());
                 db.Parameters("last_name", record.last_name.Trim());
                 db.Parameters("business_name", record.business_name.Trim());
-                db.Parameters("business_phone",DBLogic.FormatPhoneForDatabase(record.business_phone.Trim()));
+                db.Parameters("business_phone",DBLogic.FormatPhoneForDatabase(record.business_phone.Trim() ));
                 db.Parameters("business_email", record.business_email.Trim());
                 db.Parameters("business_address", record.business_address.Trim());
                 db.Parameters("business_website", record.business_url.Trim());

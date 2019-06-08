@@ -18,7 +18,7 @@ using FOB_Sales_API.Models.Interfaces;
 namespace FOB_Sales_API.Models.UserModels
 {
 
-    public class clsAccounts : IFoBMessages
+    public class clsLogin : IFoBMessages
     {
         public string status { get; set; }
         public string message { get; set; }
@@ -150,11 +150,7 @@ namespace FOB_Sales_API.Models.UserModels
             db.Parameters("account_id", account_id);
             db.CommandText = "SELECT account_id,user_password,user_salt,account_locked,account_canceled,email_verified,is_admin,account_type,account_type_id,first_name,last_name,sales_associate FROM v_user_accounts WHERE account_id=@account_id";
             return db.ConvertQueryToDataTable();
-        }
-
-
-  
-    
+        }    
 
     }
 }

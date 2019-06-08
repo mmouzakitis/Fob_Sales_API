@@ -238,7 +238,8 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\BookingsController.cs" />
-    <Compile Include="Controllers\MarketingListControllerController.cs" />
+    <Compile Include="Controllers\UserAccountsController.cs" />
+    <Compile Include="Controllers\MarketingListController.cs" />
     <Compile Include="Controllers\PromotionController.cs" />
     <Compile Include="Controllers\TokenController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -251,8 +252,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="JwtManager.cs" />
-    <Compile Include="Models\Accounts\clsAccounts.cs" />
-    <Compile Include="Models\Accounts\clsUserModels.cs" />
+    <Compile Include="Models\Login\clsLogin.cs" />
+    <Compile Include="Models\Login\clsUserModels.cs" />
     <Compile Include="Models\ApplicationWideSettings\clsApplicationWideSettings.cs" />
     <Compile Include="Models\Booking\clsBooking.cs" />
     <Compile Include="Models\Booking\clsBookingBLL.cs" />
@@ -287,6 +288,7 @@
     <Compile Include="Models\Marketing\clsMarketingAdBLL.cs" />
     <Compile Include="Models\Marketing\clsMarketingListBLL.cs" />
     <Compile Include="Models\Reflection\clsReflection.cs" />
+    <Compile Include="Models\UserAccounts\clsUserAccount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

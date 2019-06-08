@@ -46,7 +46,7 @@ namespace FOBAdmin.Controllers.APIs
 
         [HttpPost]
         [Route("LoadMarketingList")]
-        public List<clsMarketingListRecrod> LoadMarketingList([FromBody]clsSearhMarketingList search)
+        public List<clsMarketingListRecrod> LoadMarketingList([FromBody]clsSearhObj search)
         {
             clsMarketingListBLL List = new clsMarketingListBLL();
             return List.LoadMarketingList(search);
@@ -77,6 +77,25 @@ namespace FOBAdmin.Controllers.APIs
         {
             clsMarketingListBLL List = new clsMarketingListBLL();
             return List.LoadSingleMarketingRecord(search);
+        }
+
+
+        [HttpPost]
+        [Route("LoadMarketingNotes")]
+        public string LoadMarketingNotes([FromBody]clsId search)
+        {
+            clsMarketingListBLL List = new clsMarketingListBLL();
+            return List.LoadMarketingNotes(search);
+        }
+
+        
+        [HttpPost]
+        [Route("UpdateMarketingNotes")]
+        public HttpResponseMessage UpdateMarketingNotes([FromBody]clsNotes notes)
+        {
+            clsMarketingListBLL Update = new clsMarketingListBLL();
+            Update.UpdateMarketingNotes(notes);
+            return GetHttpResponseType(Update.status, Update.message);
         }
 
         [HttpPost]

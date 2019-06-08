@@ -43,7 +43,7 @@ namespace jwtTokens.Controllers
             }
             else
             {
-                clsAccounts Account = new clsAccounts();
+                clsLogin Account = new clsLogin();
                 clsLoginObj loginObj = new clsLoginObj();
                 loginObj = Account.LoginSalesUser(user_info);
                 if (loginObj.status == KeyConstantsMsgs.success)

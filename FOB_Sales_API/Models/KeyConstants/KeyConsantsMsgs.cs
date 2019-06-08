@@ -29,6 +29,7 @@ namespace FOB_Sales_API.Models.KeyConstants
         public const string business_name_already_exists = "Business name already exists";
         public const string email_exists = "Email already exists";
      
+        public const string error_updating_notes = "error updateing marketing notes";
         public const string information_updated = "Information updated";
         public const string no_login_rights = "You don't have rights to access this website";
         //public const string only_admins = "You are not authorized to user this site";
