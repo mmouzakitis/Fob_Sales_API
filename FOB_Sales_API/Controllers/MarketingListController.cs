@@ -10,6 +10,7 @@ using WebApi.Jwt.Filters;
 using FOB_Sales_API.Models;
 using FOB_Sales_API.Models.Marketing;
 using FOB_Sales_API.Models.Listings;
+using FOB_Sales_API.Models.Common;
 //using FOB_API.Models.Listings;
 
 namespace FOBAdmin.Controllers.APIs
@@ -78,6 +79,17 @@ namespace FOBAdmin.Controllers.APIs
             clsMarketingListBLL List = new clsMarketingListBLL();
             return List.LoadSingleMarketingRecord(search);
         }
+
+
+        
+        [HttpPost]
+        [Route("BusinessNameExists")]
+        public bool? BusinessNameExists([FromBody]clsStr search)
+        {
+            clsMarketingListBLL List = new clsMarketingListBLL();
+            return List.BusinessNameExists(search);
+        }
+
 
 
         [HttpPost]

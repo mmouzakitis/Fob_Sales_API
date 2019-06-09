@@ -1,4 +1,5 @@
 ﻿using FOB_Sales_API.DataAccessLayer;
+using FOB_Sales_API.Models.Crypto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,10 @@ namespace FOB_Sales_API.Models.Common
         public string city { get; set; }
         public string state { get; set; }
         public string zip_code { get; set; }
+        public string account_type { get; set; }
         public bool? contacted { get; set; }
+        public bool? from_marketing_list { get; set; }
+        public string created_by_id { get; set; }
     }
 
     public class clsCommon
@@ -32,37 +36,52 @@ namespace FOB_Sales_API.Models.Common
             db.ClearParameters();
 
 
-            if (string.IsNullOrEmpty(SearchParameters.business_name) == false)
+            if (string.IsNullOrEmpty(SearchParameters.email) == false)
             {
-                db.Parameters("business_name", SearchParameters.business_name);
-                where_clause = "business_name LIKE '%' + @business_name + '%' ";
+                db.Parameters("email", SearchParameters.email);
+                where_clause = "user_email LIKE '%' + @email + '%' ";
                 add_AND = true;
             }
-
-            if (string.IsNullOrEmpty(SearchParameters.address) == false)
+            if (SearchParameters.from_marketing_list != null)
             {
-                db.Parameters("address", SearchParameters.address);
+                if (SearchParameters.from_marketing_list == true)
+                {
+
+                    if (add_AND == true)
+                    {
+                        where_clause = where_clause + " AND " + " marketing_list_id IS NOT NULL ";
+                    }
+                    else
+                    {
+                        where_clause = "marketing_list_id IS NOT NULL";
+                    }
+                    add_AND = true;
+                }
+            }
+            if (string.IsNullOrEmpty(SearchParameters.first_name) == false)
+            {
+                db.Parameters("first_name", SearchParameters.first_name);
                 if (add_AND == true)
                 {
-                    where_clause = where_clause + " AND " + where_clause;
+                    where_clause = where_clause + " AND " + "first_name LIKE @first_name + '%' ";
                 }
                 else
                 {
-                    where_clause = "business_address LIEK '%' + @address + '%' ";
+                    where_clause = "first_name LIKE @first_name + '%' ";
                 }
                 add_AND = true;
             }
 
-            if (string.IsNullOrEmpty(SearchParameters.city) == false)
+            if (string.IsNullOrEmpty(SearchParameters.last_name) == false)
             {
-                db.Parameters("city", SearchParameters.city);
+                db.Parameters("last_name", SearchParameters.last_name);
                 if (add_AND == true)
                 {
-                    where_clause = where_clause + " AND " + where_clause;
+                    where_clause = where_clause + " AND " + " last_name LIKE @last_name + '% ";
                 }
                 else
                 {
-                    where_clause = "business_city=@city";
+                    where_clause = "last_name LIKE @last_name + '%";
                 }
                 add_AND = true;
             }
@@ -88,17 +107,31 @@ namespace FOB_Sales_API.Models.Common
                 where_clause = "business_name LIKE '%' + @business_name + '%' ";
                 add_AND = true;
             }
+            
+             if (string.IsNullOrEmpty(SearchParameters.created_by_id) == false)
+            {
+                db.Parameters("created_by_id", clsCrypto.Decrypt(SearchParameters.created_by_id));
+                if (add_AND == true)
+                {
+                    where_clause = where_clause + " AND " + " created_by_id=@created_by_id";
+                }
+                else
+                {
+                    where_clause = "created_by_id=@created_by_id ";
+                }
+                add_AND = true;
+            }
 
             if (string.IsNullOrEmpty(SearchParameters.address) == false)
             {
                 db.Parameters("address", SearchParameters.address);
                 if (add_AND == true)
                 {
-                    where_clause = where_clause + " AND " + where_clause;
+                    where_clause = where_clause + " AND " + "business_address LIKE '%' + @address + '%' ";
                 }
                 else
                 {
-                    where_clause = "business_address LIEK '%' + @address + '%' ";
+                    where_clause = "business_address LIKE '%' + @address + '%' ";
                 }
                 add_AND = true;
             }
@@ -108,7 +141,7 @@ namespace FOB_Sales_API.Models.Common
                 db.Parameters("city", SearchParameters.city);
                 if (add_AND == true)
                 {
-                    where_clause = where_clause + " AND " + where_clause;
+                    where_clause = where_clause + " AND " + " business_city=@city";
                 }
                 else
                 {
@@ -143,6 +176,7 @@ namespace FOB_Sales_API.Models.Common
                 }
                 add_AND = true;
             }
+            
             if (SearchParameters.contacted != null)
             {
                 db.Parameters("contacted", SearchParameters.contacted.ToString());

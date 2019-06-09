@@ -24,6 +24,31 @@ namespace FOBAdmin.Controllers.APIs
     public class UserAccountsController : ApiController
     {
 
+        
+        [HttpPost]
+        [Route("BindMarketingRecords")]
+        public void BindMarketingRecords()
+        {
+            clsUserAccount SalesEmployees = new clsUserAccount();
+             SalesEmployees.BindMarketingRecords();
+        }
+
+        [HttpPost]
+        [Route("LoadSalesEmplName")]
+        public List<clsSalesEmployees> LoadSalesEmplName()
+        {
+            clsUserAccount SalesEmployees = new clsUserAccount();
+            return SalesEmployees.LoadSalesEmplName();
+        }
+
+        [HttpPost]
+        [Route("TotalAccountsCount")]
+        public List<clsAccountsGrouped> TotalAccountsCount()
+        {
+            clsUserAccount NewRecord = new clsUserAccount();
+            return NewRecord.TotalAccountsCount();
+        }
+
 
         [HttpPost]
         [Route("LoadUserAccounts")]

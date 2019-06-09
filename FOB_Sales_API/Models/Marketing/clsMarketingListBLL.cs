@@ -214,6 +214,33 @@ namespace FOB_Sales_API.Models.Marketing
             }
         }
 
+        
+
+        public bool? BusinessNameExists(clsStr str)
+        {
+            try
+            {
+                DAL db = new DAL();
+                db.Parameters("business_name", str.str.Trim());
+                db.CommandText = "SELECT TOP 1 1 FROM marketing_list WHERE business_name=@business_name";
+                int count = DBLogic.DBInteger(db.ExecuteScalar());
+                if(count > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                string tt = ex.ToString();
+                status = KeyConstantsMsgs.error;
+                return null;
+            }
+        }
+
 
         public string LoadMarketingNotes(clsId IdObj)
         {
@@ -233,6 +260,8 @@ namespace FOB_Sales_API.Models.Marketing
                 return "";
             }
         }
+
+
 
         public void UpdateMarketingNotes(clsNotes record)
         {
@@ -299,11 +328,8 @@ namespace FOB_Sales_API.Models.Marketing
             try
             {
                 DAL db = new DAL();
-
                 clsCommon common = new clsCommon();
-
                 string where_clause = common.ConstructMarketingWhereClause(SearchParameters, db);
-         
                 db.CommandText = "SELECT * FROM v_marketing_list " + where_clause + " ORDER BY date_created DESC";
                 DataTable dt = db.ConvertQueryToDataTable();
 

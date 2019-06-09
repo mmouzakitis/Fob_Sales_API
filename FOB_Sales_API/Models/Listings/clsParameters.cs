@@ -67,6 +67,11 @@ namespace FOB_Sales_API.Models.Listings
         public string marketing_token { get; set; }
     }
 
+    public class clsStr
+    {
+        public string str { get; set; }
+    }
+
 
     public class clsId
     {
