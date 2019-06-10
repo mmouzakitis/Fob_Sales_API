@@ -238,6 +238,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\BookingsController.cs" />
+    <Compile Include="Controllers\BusinessListController.cs" />
     <Compile Include="Controllers\UserAccountsController.cs" />
     <Compile Include="Controllers\MarketingListController.cs" />
     <Compile Include="Controllers\PromotionController.cs" />
@@ -285,6 +286,7 @@
     <Compile Include="Models\Listings\clsListing.cs" />
     <Compile Include="Models\Listings\clsListingBLL.cs" />
     <Compile Include="Models\Listings\clsParameters.cs" />
+    <Compile Include="Models\Business\clsBusinessListBLL.cs" />
     <Compile Include="Models\Marketing\clsMarketingAdBLL.cs" />
     <Compile Include="Models\Marketing\clsMarketingListBLL.cs" />
     <Compile Include="Models\Reflection\clsReflection.cs" />

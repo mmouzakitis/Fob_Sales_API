@@ -10,13 +10,13 @@ using System.Data;
 using System.Linq;
 using System.Web;
 
-namespace FOB_Sales_API.Models.Marketing
+namespace FOB_Sales_API.Models.Business
 {
-    public class clsMarketingListRecrod
+    public class clsBusinessListRecrod
     {
         public int index { get; set; }
         public string id { get; set; }
-        public string marketing_list_id { get; set; }
+        public string Business_list_id { get; set; }
         public string first_name { get; set; }
         public string last_name { get; set; }
         public string business_name { get; set; }
@@ -47,9 +47,9 @@ namespace FOB_Sales_API.Models.Marketing
         public string template_name { get; set; }
     }
 
-    public class clsMarketingEmail
+    public class clsBusinessEmail
     {
-        public string marketing_list_id { get; set; }
+        public string Business_list_id { get; set; }
         public string email_id { get; set; }
         public string email_from { get; set; }
         public string email_to { get; set; }
@@ -64,7 +64,7 @@ namespace FOB_Sales_API.Models.Marketing
 
     public class clsPreviousContacts
     {
-        public string marketing_list_id { get; set; }
+        public string Business_list_id { get; set; }
         public string email_sent { get; set; }
         public string date_sent { get; set; }
         public string sent_by { get; set; }
@@ -78,24 +78,24 @@ namespace FOB_Sales_API.Models.Marketing
         public string notes { get; set; }
     }
 
-    public class clsMarketingListBLL
+    public class clsBusinessListBLL
     {
         public string status { get; set; }
         public string message { get; set; }
 
 
-        public List<clsMarketingEmail> LoadMarketingEmailLog(clsId IdObj)
+        public List<clsBusinessEmail> LoadBusinessEmailLog(clsId IdObj)
         {
             try
             {
                 DAL db = new DAL();
                 db.Parameters("id", clsCrypto.Decrypt(IdObj.id));
-                db.CommandText = "SELECT * FROM marketing_list_contact_events WHERE marketing_list_id=@id";
+                db.CommandText = "SELECT * FROM business_list_contact_events WHERE Business_list_id=@id";
                 DataTable dt = db.ConvertQueryToDataTable();
-                List<clsMarketingEmail> records = new List<clsMarketingEmail>();
+                List<clsBusinessEmail> records = new List<clsBusinessEmail>();
                 foreach (DataRow row in dt.Rows)
                 {
-                    clsMarketingEmail record = new clsMarketingEmail();
+                    clsBusinessEmail record = new clsBusinessEmail();
                     record.date_sent = DBLogic.LongDateString(row["date_contacted"].ToString());
                     record.email_from = DBLogic.DBString(row["from_email"]);
                     record.email_to = DBLogic.DBString(row["to_email"]);
@@ -112,7 +112,7 @@ namespace FOB_Sales_API.Models.Marketing
             }
         }
 
-        public void SendMarketingEmail(clsMarketingEmail emailObj)
+        public void SendBusinessEmail(clsBusinessEmail emailObj)
         {
             try
             {
@@ -128,13 +128,13 @@ namespace FOB_Sales_API.Models.Marketing
             try
             {
                 DAL db = new DAL();
-                db.Parameters("marketing_list_id", clsCrypto.Decrypt(emailObj.marketing_list_id));
+                db.Parameters("Business_list_id", clsCrypto.Decrypt(emailObj.Business_list_id));
                 db.Parameters("account_id", clsCrypto.Decrypt(emailObj.email_from_id));
                 db.Parameters("from_email", emailObj.email_from);
                 db.Parameters("to_email", emailObj.email_to);
                 db.Parameters("email_header", emailObj.email_header);
                 db.Parameters("email_body", emailObj.email_body);
-                db.CommandText = "sp_create_new_marketing_contact_events";
+                db.CommandText = "sp_create_new_Business_contact_events";
                 db.ExecuteStoredProcedure();
                 status = KeyConstantsMsgs.success;
                 message = "Email Sent successfully";
@@ -154,13 +154,13 @@ namespace FOB_Sales_API.Models.Marketing
                     clsEmailBLL SendEmail = new clsEmailBLL(emailObj.email_header, emailObj.email_body, KeyConstants.KeyConstants.FishOnBooking, "", emailObj.email_from, email);
                     SendEmail.SendEmail();
                     DAL db = new DAL();
-                    db.Parameters("marketing_list_id", clsCrypto.Decrypt(emailObj.marketing_list_id));
+                    db.Parameters("Business_list_id", clsCrypto.Decrypt(emailObj.Business_list_id));
                     db.Parameters("account_id", clsCrypto.Decrypt(emailObj.email_from_id));
                     db.Parameters("from_email", emailObj.email_from);
                     db.Parameters("to_email", email);
                     db.Parameters("email_header", emailObj.email_header);
                     db.Parameters("email_body", emailObj.email_body);
-                    db.CommandText = "sp_create_new_marketing_contact_events";
+                    db.CommandText = "sp_create_new_Business_contact_events";
                     db.ExecuteStoredProcedure();
                 }
                 catch (Exception) 
@@ -173,7 +173,7 @@ namespace FOB_Sales_API.Models.Marketing
 
 
   
-        public string LoadEmailsForSending(clsId id)
+        public string LoadBusinessEmailsForSending(clsId id)
         {
             if (id.id.StartsWith(",")){
                 id.id = id.id.Remove(0, 1);
@@ -182,7 +182,7 @@ namespace FOB_Sales_API.Models.Marketing
             {
                 string emails = string.Empty;
                 DAL db = new DAL();
-                db.CommandText = "SELECT business_email FROM marketing_list WHERE marketing_list_id IN ("+ id.id +") ";
+                db.CommandText = "SELECT business_email FROM Business_list WHERE Business_list_id IN ("+ id.id +") ";
                 DataTable dt = db.ConvertQueryToDataTable();
 
                 foreach(DataRow dr in dt.Rows)
@@ -207,12 +207,12 @@ namespace FOB_Sales_API.Models.Marketing
 
 
 
-        public List<clsEmailTemplateList> LoadMarketingEmailTemplates()
+        public List<clsEmailTemplateList> LoadBusinessEmailTemplates()
        {
             try
             {
                 DAL db = new DAL();
-                db.CommandText = "SELECT email_id,email_title FROM system_emails WHERE is_marketing_template='true' AND is_active='true' ";
+                db.CommandText = "SELECT email_id,email_title FROM system_emails WHERE is_business_template='true' AND is_active='true' ";
                 DataTable dt = db.ConvertQueryToDataTable();
                 List<clsEmailTemplateList> records = new List<clsEmailTemplateList>();
                 records = (from DataRow dr in dt.Rows
@@ -231,17 +231,17 @@ namespace FOB_Sales_API.Models.Marketing
         }
 
         
-        public clsMarketingEmail LoadMarketingEmail(clsMultipliIds IdObj)
+        public clsBusinessEmail LoadBusinessEmail(clsMultipliIds IdObj)
         {
             try
             {
                 DAL db = new DAL();
                 db.Parameters("id", clsCrypto.Decrypt(IdObj.email_token));
-                db.Parameters("marketing_list_id", clsCrypto.Decrypt(IdObj.marketing_token));
+                db.Parameters("Business_list_id", clsCrypto.Decrypt(IdObj.Business_token));
 
                 db.CommandText = "SELECT * FROM v_system_emails WHERE email_id=@id ";
                 DataTable dt = db.ConvertQueryToDataTable();
-                clsMarketingEmail record = new clsMarketingEmail();
+                clsBusinessEmail record = new clsBusinessEmail();
                 foreach (DataRow row in dt.Rows)
                 {
                     record.email_id = clsCrypto.Encrypt(DBLogic.DBString(row["email_id"]));
@@ -252,7 +252,7 @@ namespace FOB_Sales_API.Models.Marketing
                 db.CommandText = "SELECT account_id, member_email,first_name,last_name FROM meet_the_team WHERE account_id=@account_id";
                 DataTable dtUser = db.ConvertQueryToDataTable();
               
-                db.CommandText = "SELECT business_email FROM marketing_list WHERE marketing_list_id=@marketing_list_id";
+                db.CommandText = "SELECT business_email FROM business_list WHERE Business_list_id=@Business_list_id";
                 string email_to = db.ExecuteScalar().ToString();
                 db.CommandText = "SELECT coupon FROM listing_coupon_bank WHERE owner_id=@account_id";
                 string promo_code = db.ExecuteScalar().ToString();
@@ -260,7 +260,7 @@ namespace FOB_Sales_API.Models.Marketing
                 string default_booking_fee = db.ExecuteScalar().ToString();
                 
 
-                db.CommandText = "SELECT first_name +' '+ last_name AS NAME FROM marketing_list WHERE marketing_list_id=@marketing_list_id";
+                db.CommandText = "SELECT first_name +' '+ last_name AS NAME FROM business_list WHERE Business_list_id=@Business_list_id";
                 string customers_name = db.ExecuteScalar().ToString();
                  
                 foreach (DataRow row in dtUser.Rows)
@@ -283,13 +283,13 @@ namespace FOB_Sales_API.Models.Marketing
         }
 
      
-        public bool? ListingBusinessNameExists(clsStr str)
+        public bool? BusinessNameExists(clsStr str)
         {
             try
             {
                 DAL db = new DAL();
                 db.Parameters("business_name", str.str.Trim());
-                db.CommandText = "SELECT TOP 1 1 FROM marketing_list WHERE business_name=@business_name";
+                db.CommandText = "SELECT TOP 1 1 FROM business_list WHERE business_name=@business_name";
                 int count = DBLogic.DBInteger(db.ExecuteScalar());
                 if(count > 0)
                 {
@@ -309,13 +309,13 @@ namespace FOB_Sales_API.Models.Marketing
         }
 
 
-        public string LoadMarketingNotes(clsId IdObj)
+        public string LoadBusinessNotes(clsId IdObj)
         {
             try
             {
                 DAL db = new DAL();
                 db.Parameters("id", clsCrypto.Decrypt(IdObj.id));
-                db.CommandText = "SELECT notes FROM marketing_list WHERE marketing_list_id=@id";
+                db.CommandText = "SELECT notes FROM business_list WHERE Business_list_id=@id";
                 string notes = DBLogic.DBString(db.ExecuteScalar());
                 status = KeyConstantsMsgs.success;
                 return notes;
@@ -330,15 +330,15 @@ namespace FOB_Sales_API.Models.Marketing
 
 
 
-        public void UpdateMarketingNotes(clsNotes record)
+        public void UpdateBusinessNotes(clsNotes record)
         {
             try
             {
                 DAL db = new DAL();
                 db.parameters.Clear();
-                db.Parameters("marketing_list_id", clsCrypto.Decrypt(record.id));
+                db.Parameters("business_list_id", clsCrypto.Decrypt(record.id));
                 db.Parameters("notes", record.notes.Trim());
-                db.CommandText = "sp_update_marketing_notes";
+                db.CommandText = "sp_update_business_notes";
                 int result = Int32.Parse(db.ExecuteStoredProcedure());
                 status = KeyConstantsMsgs.success;
                 message = KeyConstantsMsgs.information_updated;
@@ -355,18 +355,18 @@ namespace FOB_Sales_API.Models.Marketing
 
 
 
-        public clsMarketingListRecrod LoadSingleMarketingRecord(clsId IdObj)
+        public clsBusinessListRecrod LoadSingleBusinessRecord(clsId IdObj)
         {
             try
             {
                 DAL db = new DAL();
                 db.Parameters("id", clsCrypto.Decrypt(IdObj.id));
-                db.CommandText = "SELECT * FROM v_marketing_list WHERE marketing_list_id=@id";
+                db.CommandText = "SELECT * FROM v_Business_list WHERE Business_list_id=@id";
                 DataTable dt = db.ConvertQueryToDataTable();
-                clsMarketingListRecrod record = new clsMarketingListRecrod();
+                clsBusinessListRecrod record = new clsBusinessListRecrod();
                 foreach (DataRow row in dt.Rows)
                 {
-                    record.marketing_list_id = clsCrypto.Encrypt(DBLogic.DBString(row["marketing_list_id"]));
+                    record.Business_list_id = clsCrypto.Encrypt(DBLogic.DBString(row["Business_list_id"]));
                     record.first_name = DBLogic.DBString(row["first_name"]);
                     record.last_name = DBLogic.DBString(row["last_name"]);
                     record.business_phone = DBLogic.DBString(row["business_phone"]);
@@ -390,26 +390,26 @@ namespace FOB_Sales_API.Models.Marketing
         }
 
 
-        public List<clsMarketingListRecrod> LoadMarketingList(clsSearhObj SearchParameters)
+        public List<clsBusinessListRecrod> LoadBusinessList(clsSearhObj SearchParameters)
         {
             try
             {
                 DAL db = new DAL();
                 clsCommon common = new clsCommon();
                 string where_clause = common.ConstructMarketingWhereClause(SearchParameters, db);
-                db.CommandText = "SELECT * FROM v_marketing_list " + where_clause + " ORDER BY date_created DESC";
+                db.CommandText = "SELECT * FROM v_Business_list " + where_clause + " ORDER BY date_created DESC";
                 DataTable dt = db.ConvertQueryToDataTable();
 
                 clsAddressParser ParseSearchParameter = new clsAddressParser();
-                List<clsMarketingListRecrod> records = new List<clsMarketingListRecrod>();
+                List<clsBusinessListRecrod> records = new List<clsBusinessListRecrod>();
                 int count = 1;
                 foreach(DataRow row in dt.Rows)
                 {
-                    clsMarketingListRecrod record = new clsMarketingListRecrod()
+                    clsBusinessListRecrod record = new clsBusinessListRecrod()
                     {
                         index = count,
-                        id = DBLogic.DBString(row["marketing_list_id"]),
-                        marketing_list_id = clsCrypto.Encrypt(DBLogic.DBString(row["marketing_list_id"])),
+                        id = DBLogic.DBString(row["Business_list_id"]),
+                        Business_list_id = clsCrypto.Encrypt(DBLogic.DBString(row["Business_list_id"])),
                         first_name = DBLogic.DBString(row["first_name"]),
                         last_name = DBLogic.DBString(row["last_name"]),
                         business_phone = DBLogic.DBString(row["business_phone"]),
@@ -432,9 +432,9 @@ namespace FOB_Sales_API.Models.Marketing
                 return records;
 
                 //records = (from DataRow row in dt.Rows
-                //           select new clsMarketingListRecrod()
+                //           select new clsBusinessListRecrod()
                 //           {
-                //               marketing_list_id = clsCrypto.Encrypt(DBLogic.DBString(row["marketing_list_id"])),
+                //               Business_list_id = clsCrypto.Encrypt(DBLogic.DBString(row["Business_list_id"])),
                 //               first_name = DBLogic.DBString(row["first_name"]),
                 //               last_name = DBLogic.DBString(row["last_name"]),
                 //               business_phone = DBLogic.DBString(row["business_phone"]),
@@ -461,7 +461,7 @@ namespace FOB_Sales_API.Models.Marketing
 
 
   
-        public void CreateNewMarketingRecord(clsMarketingListRecrod record)
+        public void CreateNewBusinessRecord(clsBusinessListRecrod record)
         {
             try
             {
@@ -478,7 +478,7 @@ namespace FOB_Sales_API.Models.Marketing
                 db.Parameters("business_state", record.business_state.Trim());
                 db.Parameters("business_zip", record.business_zip.Trim());
                 db.Parameters("created_by_id", clsCrypto.Decrypt(record.created_by_id));
-                db.CommandText = "sp_create_new_marketing_contact";
+                db.CommandText = "sp_create_new_Business_contact";
                 int result = Int32.Parse(db.ExecuteStoredProcedure());
                 if(result == -10)
                 {
@@ -492,7 +492,7 @@ namespace FOB_Sales_API.Models.Marketing
                 else
                 {
                     status = KeyConstantsMsgs.success;
-                    message = KeyConstantsMsgs.marketing_record_created;
+                    message = KeyConstantsMsgs.Business_record_created;
                 }
                 
             }
@@ -500,19 +500,19 @@ namespace FOB_Sales_API.Models.Marketing
             {
                 string ss = ex.ToString();
                 status = KeyConstantsMsgs.error;
-                message = KeyConstantsMsgs.error_creating_new_marketing_record;
+                message = KeyConstantsMsgs.error_creating_new_business_record;
             }
         }
         
 
 
-        public void UpdateMarketingRecord(clsMarketingListRecrod record)
+        public void UpdateBusinessRecord(clsBusinessListRecrod record)
         {
             try
             {
                 DAL db = new DAL();
                 db.parameters.Clear();
-                db.Parameters("marketing_list_id", clsCrypto.Decrypt(record.marketing_list_id));
+                db.Parameters("Business_list_id", clsCrypto.Decrypt(record.Business_list_id));
                 db.Parameters("first_name", record.first_name.Trim());
                 db.Parameters("last_name", record.last_name.Trim());
                 db.Parameters("business_name", record.business_name.Trim());
@@ -523,7 +523,7 @@ namespace FOB_Sales_API.Models.Marketing
                 db.Parameters("business_city", record.business_city.Trim());
                 db.Parameters("business_state", record.business_state.Trim());
                 db.Parameters("business_zip", record.business_zip.Trim());
-                db.CommandText = "sp_update_marketing_contact";
+                db.CommandText = "sp_update_Business_contact";
                 int result = Int32.Parse(db.ExecuteStoredProcedure());
                 status = KeyConstantsMsgs.success;
                 message = KeyConstantsMsgs.information_updated;
@@ -532,7 +532,7 @@ namespace FOB_Sales_API.Models.Marketing
             {
                 string ss = ex.ToString();
                 status = KeyConstantsMsgs.error;
-                message = KeyConstantsMsgs.error_updating_marketing_list;
+                message = KeyConstantsMsgs.error_updating_Business_list;
             }
         }
 

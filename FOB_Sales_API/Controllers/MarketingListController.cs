@@ -83,11 +83,24 @@ namespace FOBAdmin.Controllers.APIs
 
         
         [HttpPost]
-        [Route("BusinessNameExists")]
-        public bool? BusinessNameExists([FromBody]clsStr search)
+        [Route("LoadEmailsForSending")]
+        public string LoadEmailsForSending([FromBody]clsId ids)
+        {
+            if(ids.id == string.Empty)
+            {
+                return "";
+            }
+            clsMarketingListBLL List = new clsMarketingListBLL();
+            return List.LoadEmailsForSending(ids);
+        }
+
+
+        [HttpPost]
+        [Route("ListingBusinessNameExists")]
+        public bool? ListingBusinessNameExists([FromBody]clsStr search)
         {
             clsMarketingListBLL List = new clsMarketingListBLL();
-            return List.BusinessNameExists(search);
+            return List.ListingBusinessNameExists(search);
         }
 
 

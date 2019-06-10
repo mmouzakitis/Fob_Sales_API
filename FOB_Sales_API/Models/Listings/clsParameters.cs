@@ -65,6 +65,7 @@ namespace FOB_Sales_API.Models.Listings
         public string email_token { get; set; }
         public string account_token { get; set; }
         public string marketing_token { get; set; }
+        public string Business_token { get; set; }
     }
 
     public class clsStr

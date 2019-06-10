@@ -33,8 +33,8 @@ namespace FOB_Sales_API.Models.UserAccounts
         public string status { get; set; }
         public string message { get; set; }
 
-
         public int index { get; set; }
+        public string account_id { get; set; }
         public string first_name { get; set; }
         public string last_name { get; set; }
         public string display_name { get; set; }
@@ -50,8 +50,6 @@ namespace FOB_Sales_API.Models.UserAccounts
         public bool has_bookings { get; set; }
         public bool from_marketing_list { get; set; }
         public string date_created { get; set; }
-
-
         
         public void BindMarketingRecords()
         {
@@ -71,7 +69,6 @@ namespace FOB_Sales_API.Models.UserAccounts
                 message = KeyConstantsMsgs.error_updating_notes;
             }
         }
-
 
 
 
@@ -148,6 +145,7 @@ namespace FOB_Sales_API.Models.UserAccounts
                     clsUserAccount record = new clsUserAccount()
                     {
                         index = count,
+                        account_id = clsCrypto.Encrypt(DBLogic.DBString(row["account_id"])),
                         first_name = DBLogic.DBString(row["first_name"]),
                         last_name = DBLogic.DBString(row["last_name"]),
                         display_name = DBLogic.DBString(row["display_name"]),
@@ -176,6 +174,95 @@ namespace FOB_Sales_API.Models.UserAccounts
             }
         }
 
+
+              
+        public List<clsListingDetails> LoadListingDetails(clsId id)
+        {
+            try
+            {
+                DAL db = new DAL();
+                db.parameters.Add("@account_id", clsCrypto.Decrypt(id.id));
+                db.CommandText = "SELECT * FROM v_listing_Details WHERE account_id=@account_id";
+                DataTable dt = db.ConvertQueryToDataTable();
+                List<clsListingDetails> records = new List<clsListingDetails>();
+                int count = 1;
+                foreach (DataRow row in dt.Rows)
+                {
+                    clsListingDetails record = new clsListingDetails()
+                    {
+                        index = count,
+                        listing_category = DBLogic.DBString(row["listing_category"]),
+                        listing_name = DBLogic.DBString(row["listing_name"]),
+                        listing_city = DBLogic.DBString(row["listing_city"]),
+                        listing_state_abbr = DBLogic.DBString(row["listing_state_abbr"]),
+                        listing_zip = DBLogic.DBString(row["listing_zip"]),
+                        listing_active = DBLogic.DBString(row["listing_active"]),
+                        max_capacity = DBLogic.DBString(row["max_capacity"]),
+                        coupon = DBLogic.DBString(row["coupon"]),
+                        booking_fee_rate = DBLogic.DBString(row["booking_fee_rate"]),
+                        total_images = DBLogic.DBString(row["total_images"]),
+                        listing_verified = DBLogic.ConvertBoolToYesNo(DBLogic.DBBool(row["listing_verified"])),
+                        date_created = DBLogic.LongDateString(row["date_created"].ToString()),
+                        //receive_txt_msg = DBLogic.ConvertBoolToYesNo(DBLogic.DBBool(row["receive_text_msg"])),
+                        //account_locked = DBLogic.ConvertBoolToYesNo(DBLogic.DBBool(row["account_locked"])),
+                    };
+                    records.Add(record);
+                    count = count + 1;
+                }
+                return records;
+            }
+            catch (Exception ex)
+            {
+                string tt = ex.ToString();
+                return null;
+            }
+        }
+
+                
+  
+
+        public List<clsBookingDetails> LoadBookingDetails(clsId id)
+        {
+            try
+            {
+                DAL db = new DAL();
+                db.parameters.Add("@listing_id",clsCrypto.Decrypt(id.id));
+                db.CommandText = "SELECT * FROM v_booking_details WHERE listing_id=@listing_id";
+                DataTable dt = db.ConvertQueryToDataTable();
+                List<clsBookingDetails> records = new List<clsBookingDetails>();
+                int count = 1;
+                foreach (DataRow row in dt.Rows)
+                {
+                    clsBookingDetails record = new clsBookingDetails()
+                    {
+                        index = count,
+                        first_name = DBLogic.DBString(row["first_name"]),
+                        last_name = DBLogic.DBString(row["last_name"]),
+                        listing_name = DBLogic.DBString(row["listing_name"]),
+                        listing_city = DBLogic.DBString(row["listing_city"]),
+                        listing_state_abbr = DBLogic.DBString(row["listing_state_abbr"]),
+                        listing_zip = DBLogic.DBString(row["listing_zip"]),
+                        listing_active = DBLogic.DBString(row["listing_active"]),
+                        date_created = DBLogic.DBString(row["date_created"]),
+                        event_date = DBLogic.DBString(row["event_date"]),
+                        start_time = DBLogic.DBString(row["start_time"]),
+                        end_time = DBLogic.DBString(row["end_time"]),
+                        booking_fee = DBLogic.DBString(row["booking_fee"]),
+                        aggreed_fee = DBLogic.DBString(row["aggreed_fee"]),
+                        booking_active = DBLogic.DBString(row["booking_active"]),
+
+                    };
+                    records.Add(record);
+                    count = count + 1;
+                }
+                return records;
+            }
+            catch (Exception ex)
+            {
+                string tt = ex.ToString();
+                return null;
+            }
+        }
 
     }
 }

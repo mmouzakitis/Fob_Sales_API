@@ -13,7 +13,11 @@ namespace FOB_Sales_API.Models.KeyConstants
         public const string error = "error";
         public const string error_updating_marketing_list = "Error updating marketing list";
         public const string error_creating_new_marketing_record = "Error creating new marketing record";
+        public const string error_updating_Business_list = "Error updating new business record";
+        public const string error_creating_new_business_record = "Error creating new business record";
+        public const string Business_record_created = "Business record exists";
         
+
         public const string captcha_failed = "You did not pass ReCaptcha verification, please try again";
         //public const string changes_saved = "Changes saved";
         public const string booking_canceled = "Booking canceled";
@@ -28,7 +32,7 @@ namespace FOB_Sales_API.Models.KeyConstants
         public const string marketing_record_created = "Marketing record created";
         public const string business_name_already_exists = "Business name already exists";
         public const string email_exists = "Email already exists";
-     
+        
         public const string error_updating_notes = "error updateing marketing notes";
         public const string information_updated = "Information updated";
         public const string no_login_rights = "You don't have rights to access this website";

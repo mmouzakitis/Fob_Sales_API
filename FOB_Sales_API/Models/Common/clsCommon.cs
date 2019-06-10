@@ -77,11 +77,11 @@ namespace FOB_Sales_API.Models.Common
                 db.Parameters("last_name", SearchParameters.last_name);
                 if (add_AND == true)
                 {
-                    where_clause = where_clause + " AND " + " last_name LIKE @last_name + '% ";
+                    where_clause = where_clause + " AND " + " last_name LIKE @last_name + '%' ";
                 }
                 else
                 {
-                    where_clause = "last_name LIKE @last_name + '%";
+                    where_clause = "last_name LIKE @last_name + '%' ";
                 }
                 add_AND = true;
             }

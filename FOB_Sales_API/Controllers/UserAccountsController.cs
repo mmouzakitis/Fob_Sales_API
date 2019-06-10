@@ -58,7 +58,24 @@ namespace FOBAdmin.Controllers.APIs
             return NewRecord.LoadUserAccounts(search);
         }
 
-     
+        
+
+        [HttpPost]
+        [Route("LoadAccountListings")]
+        public List<clsListingDetails> LoadListingDetails(clsId id)
+        {
+            clsUserAccount NewRecord = new clsUserAccount();
+            return NewRecord.LoadListingDetails(id);
+        }
+
+        [HttpPost]
+        [Route("LoadAccountBookings")]
+        public List<clsBookingDetails> LoadBookingDetails(clsId id)
+        {
+            clsUserAccount NewRecord = new clsUserAccount();
+            return NewRecord.LoadBookingDetails(id);
+        }
+
 
         public HttpResponseMessage GetHttpResponseType(string status, string message)
         {

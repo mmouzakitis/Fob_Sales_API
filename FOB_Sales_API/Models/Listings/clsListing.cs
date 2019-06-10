@@ -74,56 +74,10 @@ namespace FOB_Sales_API.Models.Listings
         public string zip { get; set; }
         public string notes_to_angler { get; set; }
         public string cancellation_policy { get; set; }
-       // public string base_price { get; set; }
-        //public string cancellation_cut_off_days { get; set; }
-        //public string fishing_type_id { get; set; }
-        //public string captain_id { get; set; }
-        //public string contact_id { get; set; }
-        //public string base_guests { get; set; }
-        //public string extra_per_guest { get; set; }
-        //public string pay_policy { get; set; }
-        //public string transaction_type_id { get; set; }
+
     }
 
-    public class clsSearchContainer
-    {
-       public int record_count { get; set; }
-       public  List<clsListing> records { get; set; }
-    }
-
-    public class clsListing 
-    {
-        public string l_id { get; set; }
-        public int index { get; set; }
-        public string acc_id { get; set; }
-        public string l_name { get; set; }
-        public string b_length { get; set; }
-        public string b_manufacturer { get; set; }
-        public string l_city { get; set; }
-        public string l_state{ get; set; }
-        public string l_state_abbr { get; set; }
-        public string listers_name { get; set; }
-        public string max_guests { get; set; }
-        public string l_category { get; set; }
-        public bool l_verified { get; set; }
-        public string l_category_id { get; set; }
-        public string l_desc_first_half { get; set; }
-        public string l_desc_second_half { get; set; }
-        public bool expand_description { get; set; }
-        public int l_status { get; set; }
-        public string l_active_text { get; set; }
-        public string create_date { get; set; }
-        public string main_image_path { get; set; }
-        public int no_of_reviews { get; set; }
-        public float average_rating { get; set; }
-        public string fish_species_ids { get; set; }
-        public string feature_ids { get; set; }
-
-        public string pay_policy { get; set; }
-        public string cancellation_policy { get; set; }
-        public string notes_to_angler { get; set; }
-        
-    }
+  
 
     public class clsListingList
     {
@@ -144,45 +98,46 @@ namespace FOB_Sales_API.Models.Listings
         public string l_category { get; set; }
     }
 
-    public class clsListingDetails : clsListing
+    public class clsListingDetails 
     {
-        //public string l_category_id { get; set; }
-        public string l_description { get; set; }
-        public string contact_id { get; set; }
-
-        public string main_image { get; set; }
-        public string listers_f_name { get; set; }
-        public string listers_l_name { get; set; }
-        public string contact_f_name { get; set; }
-        public string contact_l_name { get; set; }
-        public string captains_name { get; set; }
-
-        public string listers_username { get; set; }
-        public string listers_contact_number { get; set; }
-        //public string total_rating { get; set; }
-        //public string total_raters { get; set; }
-        //public string rating { get; set; }
-       // public string l_state { get; set; }
-        public string state { get; set; }
-        //public string meets_listing_criteria { get; set; }
-        public int l_active { get; set; }
-        public string removed_date { get; set; }
-        public string l_zip { get; set; }
-        public string provence { get; set; }
-        public string listing_description_details { get; set; }
-        public string listing_location { get; set; }
-        //public string boat_length { get; set; }
-        public int max_capacity { get; set; }
-        public string l_address { get; set; }
-        public string country_id { get; set; }
-        public string country { get; set; }
-        public string fishing_type_id { get; set; }
-
-        public string cancellation_cut_off_days { get; set; }
+        public int index { get; set; }
+        public string listing_category { get; set; }
+        public string listing_name { get; set; }
+        public string listing_city { get; set; }
+        public string listing_state_abbr { get; set; }
+        public string listing_zip { get; set; }
+        public string listing_active { get; set; }
+        public string max_capacity { get; set; }
+        public string coupon { get; set; }
+        public string booking_fee_rate { get; set; }
+        public string total_images { get; set; }
+        public string listing_verified { get; set; }
+        public string date_created { get; set; }
+        public string account_locked { get; set; }
+        public string receive_txt_msg { get; set; }
     }
 
 
+    public class clsBookingDetails
+    {
+        public int index { get; set; }
+        public string first_name { get; set; }
+        public string last_name { get; set; }
+        public string listing_name { get; set; }
+        public string listing_state_abbr { get; set; }
+        public string listing_zip { get; set; }
+        public string listing_active { get; set; }
+        public string listing_city { get; set; }
+        public string date_created { get; set; }
+        public string event_date { get; set; }
+        public string start_time { get; set; }
+        public string end_time { get; set; }
+        public string booking_fee { get; set; }
+        public string aggreed_fee { get; set; }
+        public string booking_active { get; set; }                     
+    }
 
+ 
 
     public class clsUpdateListingStatus
     {
